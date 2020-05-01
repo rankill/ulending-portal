@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "typeRoots" : [
+      "./types"
+    ],
     "target": "es2018",
     "module": "esnext",
     "moduleResolution": "node",

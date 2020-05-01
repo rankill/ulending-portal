@@ -1,4 +1,6 @@
-const colors = require('vuetify/es5/util/colors').default
+const webpack = require('webpack');
+
+const colors = require('vuetify/es5/util/colors').default;
 
 module.exports = {
   mode: 'universal',
@@ -30,7 +32,11 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    '~plugins/filters/filters.ts',
+    '~plugins/directives/onlyNumbers.ts',
+    { src: '~/plugins/vuex-persist', ssr: false }
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -62,7 +68,7 @@ module.exports = {
           secondary: '#212322',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: '#272727',
           success: colors.green.accent3,
           white: '#fff'
         }
@@ -73,9 +79,15 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        // global modules
+        _: 'lodash'
+      })
+    ],
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend() {}
   }
-}
+};

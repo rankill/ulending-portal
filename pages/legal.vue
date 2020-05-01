@@ -12,7 +12,7 @@ export default {
   head() {
     return {
       title: 'Politica de datos'
-    }
+    };
   }
-}
+};
 </script>

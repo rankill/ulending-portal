@@ -2,15 +2,23 @@
   <v-app class="app" light>
     <!--NAVBAR-->
     <v-app-bar
-      class="app__navbar m3"
+      class="app__navbar"
       :color="!scrolledNavbar ? 'primary' : 'primary'"
       fixed
       app
-      :height="'80'"
+      :height="headerHeight"
       :elevation="!scrolledNavbar ? 0 : 15"
     >
       <!--LEFT NAVBAR-->
-      <UlendingLogo />
+      <div class="">
+        <nuxt-link
+          class="app__navbar__logo"
+          tag="img"
+          :src="require('~/static//logo/negative_color.png')"
+          to="/"
+        >
+        </nuxt-link>
+      </div>
     </v-app-bar>
 
     <!--CONTENT-->
@@ -25,33 +33,34 @@
   </v-app>
 </template>
 
-<script>
-import UlendingLogo from '~/components/UlendingLogo.vue'
+<script lang="ts">
+import { Vue } from 'vue-property-decorator';
 
-const SCROLL_OFFSET = 60
+interface IndexData {
+  headerHeight: number;
+  scrolledNavbar: boolean;
+  fixed: boolean;
+}
 
-export default {
-  components: { UlendingLogo },
-  data() {
+const SCROLL_OFFSET = 30;
+
+export default Vue.extend({
+  data(): IndexData {
     return {
+      headerHeight: 90,
       scrolledNavbar: false,
-      lastScrollPosition: 0,
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      right: true,
-      primaryBg: this.$vuetify.theme.primary
-    }
+      fixed: false
+    };
   },
   mounted() {
-    window.addEventListener('scroll', this.onScroll)
+    window.addEventListener('scroll', this.onScroll);
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('scroll', this.onScroll);
   },
   methods: {
     onScroll() {
-      this.scrolledNavbar = window.pageYOffset > SCROLL_OFFSET
+      this.scrolledNavbar = window.pageYOffset > SCROLL_OFFSET;
     }
   },
   head() {
@@ -65,12 +74,23 @@ export default {
             'Un préstamo para tu futuro: Financiamos tu matrícula y sostenimiento durante el periodo académico'
         }
       ]
-    }
+    };
   }
-}
+});
 </script>
 
 <style lang="scss">
-.app {
+.app__navbar {
+  &__logo {
+    height: auto;
+    width: 10rem;
+  }
+}
+.v-radio {
+  .v-input--selection-controls__input {
+    .v-icon {
+      font-size: 35px;
+    }
+  }
 }
 </style>
