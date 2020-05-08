@@ -68,13 +68,17 @@ module.exports = {
           secondary: '#212322',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: '#272727',
+          error: colors.deepOrange.accent4,
           success: colors.green.accent3,
           white: '#fff'
         }
       }
     }
   },
+  serverMiddleware: [
+    // Will register file from project api directory to handle /api/* requires
+    { path: '/api', handler: '~/api/index.js' }
+  ],
   /*
    ** Build configuration
    */

@@ -7,7 +7,7 @@
       fixed
       app
       :height="headerHeight"
-      :elevation="!scrolledNavbar ? 0 : 15"
+      :elevation="!scrolledNavbar ? 0 : 10"
     >
       <!--LEFT NAVBAR-->
       <div class="">
@@ -28,7 +28,7 @@
 
     <!--FOOTER-->
     <v-footer :fixed="fixed">
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span>U Lending &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -84,6 +84,11 @@ export default Vue.extend({
   &__logo {
     height: auto;
     width: 10rem;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 .v-radio {

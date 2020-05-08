@@ -1,7 +1,7 @@
 <template>
   <div class="landing primary">
     <v-container class="landing__container">
-      <div class="landing__main primary white--text center">
+      <div class="landing__main primary white--text center pr-3 pl-3">
         <h1
           class="ulending-title dark text-left text-sm-center text-md-left font-weight-bold"
         >
@@ -69,8 +69,8 @@
             <div v-else>
               <p>
                 <b
-                  >Cuentanos cuanto dinero necesitas en los siguientes
-                  rubros:</b
+                  >Cuanto te cuesta tu sostenimiento durante el periodo
+                  académico?</b
                 >
               </p>
 
@@ -205,15 +205,33 @@
             </v-btn>
           </v-snackbar>
         </v-form>
-      </div>
 
-      <v-row class="landing__section landing__section--requirement"> </v-row>
+        <div class="landing__main__accounting" :class="{close: !accountingMenuOpen}">
+          <v-btn
+            fab
+            outlined
+            color="primary"
+            @click="accountingMenuOpen = !accountingMenuOpen"
+          >
+            <v-icon>{{
+              accountingMenuOpen ? 'mdi-close' : 'mdi-format-list-bulleted'
+            }}</v-icon>
+          </v-btn>
+
+          <Accounting
+            v-if="accountingMenuOpen"
+            :amount="+lendingForm.amount"
+            :term-limit="+lendingForm.termLimit"
+          />
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
+import Accounting from '~/components/accounting.vue';
 
 interface Lending {
   amount: number;
@@ -251,10 +269,14 @@ interface IndexData {
   rules: any;
   lendingForm: any;
   templateModels: any;
+  accountingMenuOpen: boolean;
 }
 
 export default Vue.extend({
   name: 'Index',
+  components: {
+    Accounting
+  },
   data(): IndexData {
     return {
       formValid: false,
@@ -292,7 +314,8 @@ export default Vue.extend({
           min: 3,
           max: 12
         }
-      }
+      },
+      accountingMenuOpen: false
     };
   },
   computed: {
@@ -335,7 +358,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Home'
+      title: 'Bienvenido'
     };
   }
 });
@@ -351,7 +374,8 @@ export default Vue.extend({
     padding-top: 2rem;
 
     @media #{map-get($display-breakpoints, 'md-and-up')} {
-      padding-top: 8rem;
+      padding-top: 4rem;
+      max-width: 60rem;
     }
   }
 
@@ -372,10 +396,50 @@ export default Vue.extend({
         line-height: $lg-size-title;
       }
     }
+
+    &__accounting {
+      position: fixed;
+      bottom: 1rem;
+      display: flex;
+      right: 2rem;
+      z-index: 2;
+
+      width: 16rem;
+      height: 16rem;
+      overflow: hidden;
+
+      transition: all 400ms ease;
+
+      ::v-deep .v-card {
+        &__title,
+        &__text {
+          opacity: 1;
+          transition: all 400ms ease;
+        }
+      }
+
+      &.close {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+
+        ::v-deep .v-card {
+          &__title,
+          &__text {
+            opacity: 0;
+          }
+        }
+      }
+    }
   }
 
   &__form {
     color: white;
+
+    ::v-deep .error--text {
+      color: #272727 !important; // Important to override default red nuxt errors
+      caret-color: #dd2c00 !important;
+    }
 
     .v-radio {
       .theme--dark {

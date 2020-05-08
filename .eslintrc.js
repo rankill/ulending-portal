@@ -15,6 +15,7 @@ module.exports = {
     'prettier'
   ],
   // add your custom rules here
+  "ignorePatterns": ["server/", "api/"],
   rules: {
     'nuxt/no-cjs-in-config': 'off'
   }

@@ -1,4 +1,5 @@
 import { ActionTree, MutationTree, GetterTree } from 'vuex';
+import axios from 'axios';
 import { RootState } from '~/store';
 
 interface Lending {
@@ -7,28 +8,32 @@ interface Lending {
   type?: string;
   entries?: any;
 
-  name?: string;
-  lastName?: string;
+  // Personal
+  name?: string | null;
+  lastName?: string | null;
   id?: number | null;
   idType?: any;
   mobile?: number | null;
   altMobile?: number | null;
-  email?: string;
-  birthDate?: string;
+  email?: string | null;
+  birthDate?: string | null;
   genre?: any;
   maritalStatus?: any;
+  tel?: number | null;
+  socialStratum?: any;
+  houseType?: any;
+  dependents?: number | null;
+  contactType?: string | null;
+  status?: number | null;
+
+  // Localization
   state?: any;
   city?: any;
   address?: any;
   extraAddress?: any;
-  tel?: number | null;
-  socialStratum?: any;
-  houseType?: any;
-  dependents?: number;
-  contactType?: string;
-  status: number | null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const freshLending = (): Lending => ({
   entries: {
     transport: 0,
@@ -40,33 +45,11 @@ const freshLending = (): Lending => ({
   },
   type: 'ENROLLMENT',
   amount: 300000,
-  termLimit: 3,
-  // Personal
-  name: '',
-  lastName: '',
-  idType: {},
-  id: null,
-  birthDate: '',
-  genre: {},
-  maritalStatus: {},
-  tel: null,
-  mobile: null,
-  altMobile: null,
-
-  // Localization
-  state: {},
-  city: {},
-  address: '',
-  extraAddress: '',
-
-  // Aditional info
-  status: 0,
-  houseType: {},
-  dependents: 0
+  termLimit: 3
 });
 
 export const state = () => ({
-  lending: freshLending()
+  lending: null
 });
 
 export type LendingState = ReturnType<typeof state>;
@@ -76,9 +59,11 @@ export const mutations: MutationTree<LendingState> = {
     state.lending = lendingObj;
   },
   REMOVE_LENDING: (state: LendingState) => {
-    state.lending = freshLending();
+    state.lending = null;
   },
   UPDATE_LENDING: (state: any, lendingObj: any) => {
+    state.lending = state.lending || {};
+
     // @ts-ignore
     // eslint-disable-next-line no-undef
     _.merge(state.lending, lendingObj);
@@ -93,7 +78,18 @@ export const actions: ActionTree<LendingState, RootState> = {
     commit('REMOVE_LENDING');
   },
   updateLending({ commit }: any, lendingObj: any) {
+    console.warn('updating...');
     commit('UPDATE_LENDING', lendingObj);
+  },
+  async sendEmail({ dispatch }: any, payloadForm) {
+    console.log('EMAIL', payloadForm);
+
+    if (payloadForm) {
+      await axios.post('/api/lending-request', {
+        form: payloadForm
+      });
+      dispatch('updateLending', payloadForm);
+    }
   }
 };
 
